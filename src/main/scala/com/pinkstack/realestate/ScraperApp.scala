@@ -1,27 +1,27 @@
 package com.pinkstack.realestate
 
-import akka.stream.scaladsl.{Sink, Source}
+import akka.actor.ActorSystem
+import akka.stream.scaladsl._
+import com.pinkstack.realestate.Domain._
 import com.typesafe.scalalogging.LazyLogging
 
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContextExecutor
 
-object ScraperApp extends App with AkkaApp with LazyLogging {
-  val s = Source(NepClient.seedCategoryRequests)
-    .mapAsync(4)(NepClient.fetchCategoryRequests)
-    .flatMapConcat(requests => Source(requests))
+object ScraperApp extends App with LazyLogging {
+  logger.info("ScraperApp starting.")
 
-    .collect {
-      case request: EstateRequest =>
-        NepClient.fetchEstateListing(request)
-      case categoryPageRequest: CategoryPageRequest =>
-        Future.successful("ok")
-    }
-    .mapAsync(5)(identity)
-    .filterNot(_ == "ok")
-    // .toMat(Sink.foreach(println))(Keep.right)
-    .runWith(Sink.foreach(println))
-    .onComplete { _ =>
-      println("completed.")
-      system.terminate()
-    }
+  implicit val system: ActorSystem = ActorSystem("scraperAppTwo")
+  implicit val context: ExecutionContextExecutor = system.dispatcher
+
+  val estatePrinter: Option[Estate] => Unit = {
+    case Some(Estate(uri, title: String)) =>
+      println(s"$title at ${uri.toString}")
+    case None =>
+      println("Fail.")
+  }
+
+  NepClient()
+    .pipeline
+    .runWith(Sink.foreach(estatePrinter))
+    .onComplete(_ => system.terminate())
 }

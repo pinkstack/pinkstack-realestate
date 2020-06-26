@@ -56,8 +56,7 @@ final case class NepClient(timeout: FiniteDuration = 4.seconds)(
     }
 
     val categoryRequests: Document => Option[List[CategoryRequest]] = { document =>
-      lastCategoryPage(document)
-        .flatMap(n => Option(Range(2, hardLimit(n)).map(pageNumberToRequest)).map(_.toList))
+      lastCategoryPage(document).flatMap(n => Option(Range(2, hardLimit(n)).map(pageNumberToRequest)).map(_.toList))
     }
 
     val estateRequests: Document => List[EstateRequest] = { document =>
@@ -74,17 +73,13 @@ final case class NepClient(timeout: FiniteDuration = 4.seconds)(
   }
 
   val fetchEstatePage: EstateRequest => Future[Option[Estate]] = { estateRequest =>
-    val parse: Document => Option[Estate] = { document =>
-      Option(document.selectFirst("title"))
-        .flatMap { op =>
-          op.text().split(""" - Nep""").toList.headOption
-            .map(_.strip())
-        }
-        .map(title => Estate(estateRequest.request.uri, title))
-    }
+    val parse: Document => Option[Estate] = doc =>
+      for {
+        first <- Option(doc.selectFirst("title"))
+        title <- first.text().split(""" - Nep""").toList.headOption.map(_.strip())
+      } yield Estate(estateRequest.request.uri, title)
 
-    requestDocument(estateRequest.request)
-      .map(doc => parse(doc))
+    requestDocument(estateRequest.request).map(parse)
   }
 
   val pipeline: Source[Option[Estate], NotUsed] = {

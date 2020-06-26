@@ -5,10 +5,10 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpRequest
 import akka.stream.ThrottleMode
-import akka.stream.scaladsl.{Concat, Flow, Source}
+import akka.stream.scaladsl.{Flow, Merge, Source}
 import com.typesafe.scalalogging.LazyLogging
-import io.lemonlabs.uri.{AbsoluteUrl, Url}
 import io.lemonlabs.uri.typesafe.dsl._
+import io.lemonlabs.uri.{AbsoluteUrl, Url}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -99,7 +99,7 @@ final case class NepClient(timeout: FiniteDuration = 4.seconds)(
           .via(categoryFetch)
           .flatMapConcat { case (_, lx) => Source(lx).map(fetchEstatePage) }
 
-        Source.combine(firstEstates, categoryEstates)(Concat(_))
+        Source.combine(firstEstates, categoryEstates)(Merge(_))
       }
 
     categoriesSource

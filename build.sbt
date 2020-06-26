@@ -34,3 +34,5 @@ scalacOptions ++= Seq(
   "-target:jvm-1.11",
   "-unchecked"
 )
+
+enablePlugins(JavaAppPackaging)

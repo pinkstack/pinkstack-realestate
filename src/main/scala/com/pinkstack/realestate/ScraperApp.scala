@@ -12,6 +12,7 @@ object ScraperApp extends App with LazyLogging {
 
   implicit val system: ActorSystem = ActorSystem("scraperAppTwo")
   implicit val context: ExecutionContextExecutor = system.dispatcher
+  implicit val configuration: Configuration = Configuration.loadOrThrow
 
   val estatePrinter: Option[Estate] => Unit = {
     case Some(Estate(uri, title: String)) =>

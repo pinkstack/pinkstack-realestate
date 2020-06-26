@@ -14,6 +14,7 @@ libraryDependencies ++= Seq(
 
   // Configuration
   "com.typesafe" % "config" % "1.4.0",
+  "com.github.pureconfig" %% "pureconfig" % "0.12.3",
 
   // URL Parsing
   "io.lemonlabs" %% "scala-uri" % "2.2.2",

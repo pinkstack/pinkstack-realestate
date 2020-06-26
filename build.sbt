@@ -14,6 +14,7 @@ libraryDependencies ++= Seq(
 
   // Configuration
   "com.typesafe" % "config" % "1.4.0",
+  "com.github.pureconfig" %% "pureconfig" % "0.12.3",
 
   // URL Parsing
   "io.lemonlabs" %% "scala-uri" % "2.2.2",
@@ -21,10 +22,20 @@ libraryDependencies ++= Seq(
   // Parsing
   "org.jsoup" % "jsoup" % "1.13.1",
 
+  // JSON
+  "io.circe" %% "circe-core" % "0.12.3",
+  "io.circe" %% "circe-generic" % "0.12.3",
+  "io.circe" %% "circe-parser" % "0.12.3",
+
   // Logging
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
   "com.typesafe.akka" %% "akka-slf4j" % "2.6.6",
+
+  // Testing
+  "org.scalatest" %% "scalatest" % "3.2.0" % "test",
+  "org.scalatest" %% "scalatest-flatspec" % "3.2.0" % "test",
+  "org.scalatest" %% "scalatest-shouldmatchers" % "3.2.0" % "test"
 )
 
 scalacOptions ++= Seq(
@@ -36,3 +47,5 @@ scalacOptions ++= Seq(
 )
 
 enablePlugins(JavaAppPackaging)
+
+mainClass in assembly := Some("com.pinkstack.realestate.ScraperApp")

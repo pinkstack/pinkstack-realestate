@@ -10,7 +10,7 @@ case class Pagination(categoryPagesLimit: Int)
 
 case class Fetching(categoriesParallelism: Int, estatesParallelism: Int)
 
-case class ThrottlingEstates(elements: Int, per: Int, maxBurst: Int)
+case class ThrottlingEstates(elements: Int, per: Int, maximumBurst: Int)
 
 case class Configuration(seed: Seed,
                          pagination: Pagination,

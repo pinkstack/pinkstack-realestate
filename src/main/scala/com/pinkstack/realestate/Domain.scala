@@ -6,18 +6,23 @@ import io.lemonlabs.uri.Url
 object Domain {
   type CategorySlug = String
 
-  class CategoryRequest(val request: HttpRequest, val slug: CategorySlug) {
+  case class CategoryRequest(request: HttpRequest, slug: CategorySlug) {
     override def toString: CategorySlug =
       s"CategoryRequest ${request.uri}"
   }
 
-  class EstateRequest(val request: HttpRequest, val categorySlug: CategorySlug) {
+  case class EstateRequest(request: HttpRequest, categorySlug: CategorySlug) {
     override def toString: CategorySlug =
       s"EstateRequest ${request.uri}"
   }
 
   implicit val lemonLabsUrlToAkkaUrl: Url => Uri = url => Uri(url.toString())
 
-  case class Estate(sourceUri: Uri, title: String)
+  case class Estate(title: String,
+                    price: BigDecimal,
+                    refNumber: String,
+                    sourceUri: Option[String] = None,
+                    categories: Map[String, String] = Map.empty[String, String],
+                    locationDetails: Map[String, Vector[String]] = Map.empty)
 
 }

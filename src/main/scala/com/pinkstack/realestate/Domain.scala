@@ -18,11 +18,14 @@ object Domain {
 
   implicit val lemonLabsUrlToAkkaUrl: Url => Uri = url => Uri(url.toString())
 
-  case class Estate(title: String,
-                    price: BigDecimal,
-                    refNumber: String,
-                    sourceUri: Option[String] = None,
-                    categories: Map[String, String] = Map.empty[String, String],
-                    locationDetails: Map[String, Vector[String]] = Map.empty)
+  case class Location(latitude: Double, longitude: Double)
 
+  case class Estate(title: String,
+                    refNumber: String,
+                    price: Double,
+                    visibility: Boolean,
+                    scrapedFromUrl: String,
+                    locationDetails: Map[String, Vector[String]] = Map.empty,
+                    categories: Map[String, String] = Map.empty[String, String],
+                    location: Option[Location] = None)
 }

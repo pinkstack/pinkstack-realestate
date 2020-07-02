@@ -1,17 +1,16 @@
-package com.pinkstack.realestate
+package com.pinkstack.realestate.apps
 
 import akka.actor.ActorSystem
 import akka.stream.scaladsl._
 import com.pinkstack.realestate.Domain._
+import com.pinkstack.realestate.{Configuration, NepClient}
 import com.typesafe.scalalogging.LazyLogging
-import io.circe._
 import io.circe.generic.auto._
-import io.circe.parser._
 import io.circe.syntax._
 
 import scala.concurrent.ExecutionContextExecutor
 
-object ScraperApp extends App with LazyLogging {
+object Scraper extends App with LazyLogging {
   logger.info("ScraperApp starting.")
 
   implicit val system: ActorSystem = ActorSystem("scraperAppTwo")

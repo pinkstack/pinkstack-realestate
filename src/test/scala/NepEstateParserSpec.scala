@@ -2,6 +2,7 @@ import java.io.InputStreamReader
 import java.nio.file.Path
 
 import cats._
+import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import com.pinkstack.realestate.Domain.Estate
 import com.pinkstack.realestate.{NepEstateParser, NoTitleFound, NotActive}
@@ -27,15 +28,17 @@ class NepEstateParserSpec extends AnyFlatSpec
 
   "An NepEstateParser" should "throw an error" in {
     read("404-error-page.html").map { doc =>
-      val result = NepEstateParser.parse(doc)
-      assert(result.left.value == NotActive)
+      NepEstateParser.parse(doc) match {
+        case Invalid(e) => assert(true)
+        case Valid(a) => fail("should fail not be valid")
+      }
     }
   }
 
   it should "regular listing" in {
     read("dravograd-stanovanje.html").map { doc =>
-      NepEstateParser.parse(doc) match {
-        case Right(Estate(title, price, refNumber, sourceUri, categories, locationDetails)) =>
+      NepEstateParser.parse(doc).toEither match {
+        case Right(Estate(title, refNumber, price, visibility, scrapedFromUrl, locationDetails, categories, location)) =>
           assert(title == "Prodaja, Stanovanje, 4-sobno: DRAVOGRAD, 146.2 m2")
           assert(categories("Posredovanje") == "Prodaja")
           assert(refNumber == "6305223")
@@ -52,7 +55,7 @@ class NepEstateParserSpec extends AnyFlatSpec
 
     estates.map(e => (e._1, e._2, read(e._1))).foreach {
       case (name, expectedPrice, Some(document)) =>
-        NepEstateParser.parse(document) match {
+        NepEstateParser.parse(document).toEither match {
           case Right(estate: Estate) =>
             assert(estate.price == expectedPrice)
           case Left(value) =>

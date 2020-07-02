@@ -6,6 +6,8 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpRequest
 import akka.stream.ThrottleMode
 import akka.stream.scaladsl.{Flow, Merge, Source}
+import cats.data.NonEmptyChain
+import cats.data.Validated.{Invalid, Valid}
 import com.typesafe.scalalogging.LazyLogging
 import io.lemonlabs.uri.typesafe.dsl._
 import io.lemonlabs.uri.{AbsoluteUrl, Url}
@@ -44,7 +46,7 @@ final case class NepClient(timeout: FiniteDuration = 4.seconds)(
 
     val hardLimit: Int => Int = lastPage => {
       val categoryPagesLimit = configuration.pagination.categoryPagesLimit
-      if (lastPage >= categoryPagesLimit) categoryPagesLimit else lastPage
+      if (lastPage >= categoryPagesLimit && categoryPagesLimit != -1) categoryPagesLimit else lastPage
     }
 
     val pageNumberToRequest: Int => CategoryRequest = page =>
@@ -74,13 +76,10 @@ final case class NepClient(timeout: FiniteDuration = 4.seconds)(
   val fetchEstatePage: EstateRequest => Future[Option[Estate]] = { estateRequest =>
     val parse: Document => Option[Estate] = { document =>
       NepEstateParser.parse(document) match {
-        case Right(value: Estate) =>
-          Some(value.copy(sourceUri = Some(estateRequest.request.uri.toString)))
-        case Left(error: ParserValidation) =>
-          logger.error {
-            s"${error.errorMessage} at ${estateRequest.request.uri}"
-          }
-
+        case Valid(value: Estate) =>
+          Some(value.copy(scrapedFromUrl = estateRequest.request.uri.toString))
+        case Invalid(errors: NonEmptyChain[ParserValidation]) =>
+          logger.error(s"${errors} at ${estateRequest.request.uri}")
           None
       }
     }

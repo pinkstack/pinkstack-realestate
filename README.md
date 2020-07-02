@@ -2,6 +2,9 @@
 
 Exploring ways of quick distributed scraping with the help of Akka.
 
+## Single mode
+
+
 ## Resources
 
 - https://tech.smartling.com/crawling-the-web-with-akka-streams-60ed8b3485e4

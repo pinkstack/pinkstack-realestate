@@ -3,7 +3,6 @@ package com.pinkstack.realestate
 import pureconfig._
 import pureconfig.generic.auto._
 import pureconfig.ConfigSource
-import pureconfig.generic.ProductHint
 
 case class Seed(initialCategories: List[String])
 

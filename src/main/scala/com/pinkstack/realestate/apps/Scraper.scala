@@ -35,9 +35,11 @@ object Main {
   import Implicits._
 
   def withConfiguration(categories: CategoryList, numberOfPages: Int): Unit = {
-    implicit val configuration: Configuration =
-      (GenLens[Configuration](_.seed.initialCategories).set(categories) compose
-        GenLens[Configuration](_.pagination.categoryPagesLimit).set(numberOfPages)) (Configuration.loadOrThrow)
+    val configurationLens: Configuration => Configuration =
+      GenLens[Configuration](_.seed.initialCategories).set(categories) compose
+        GenLens[Configuration](_.pagination.categoryPagesLimit).set(numberOfPages)
+
+    implicit val configuration: Configuration = configurationLens(Configuration.loadOrThrow)
     implicit val system: ActorSystem = ActorSystem("scraper")
     implicit val context: ExecutionContextExecutor = system.dispatcher
 

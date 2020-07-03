@@ -6,8 +6,15 @@ scalaVersion := "2.13.2"
 
 libraryDependencies ++= Seq(
   // Akka and Akka Streams
+  "com.typesafe.akka" %% "akka-actor-typed" % "2.6.6",
   "com.typesafe.akka" %% "akka-stream" % "2.6.6",
   "com.typesafe.akka" %% "akka-http" % "10.1.12",
+
+  // Clustering and remoting
+  "com.typesafe.akka" %% "akka-cluster" % "2.6.6",
+  "com.typesafe.akka" %% "akka-cluster-typed" % "2.6.6",
+  "com.lightbend.akka.management" %% "akka-management-cluster-bootstrap" % "1.0.8",
+  "com.typesafe.akka" %% "akka-discovery" % "2.6.6",
 
   // FP
   "org.typelevel" %% "cats-core" % "2.0.0",

@@ -78,7 +78,7 @@ final case class NepClient(timeout: FiniteDuration = 4.seconds)(
       NepEstateParser.parse(document) match {
         case Valid(value: Estate) =>
           Some(value.copy(scrapedFromUrl = estateRequest.request.uri.toString))
-        case Invalid(errors: NonEmptyChain[ParserValidation]) =>
+        case Invalid(errors) =>
           logger.error(s"${errors} at ${estateRequest.request.uri}")
           None
       }

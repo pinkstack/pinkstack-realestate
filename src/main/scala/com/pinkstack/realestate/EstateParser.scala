@@ -49,7 +49,8 @@ object NepEstateParser {
   }
 
   val validatedVisibility: String => ValidationResult[Boolean] = title =>
-    if (!title.contains("ne obstaja")) true.validNec else NotActive.invalidNec
+    Option.when(!title.contains("ne obstaja"))(true)
+      .fold[ValidatedNec[ParserValidation, Boolean]](NotActive.invalidNec)(_.validNec)
 
   val validatedCategories: Transformer[Map[String, String]] = { document =>
     val parseCategories: String => Map[String, String] = _.split(""" \| """)

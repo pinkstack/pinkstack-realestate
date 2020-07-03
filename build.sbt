@@ -12,12 +12,20 @@ libraryDependencies ++= Seq(
   // FP
   "org.typelevel" %% "cats-core" % "2.0.0",
 
+  // Lenses
+  "com.github.julien-truffaut" %% "monocle-core" % "2.0.3",
+  "com.github.julien-truffaut" %% "monocle-macro" % "2.0.3",
+  "com.github.julien-truffaut" %% "monocle-law" % "2.0.3" % "test",
+
   // Configuration
   "com.typesafe" % "config" % "1.4.0",
   "com.github.pureconfig" %% "pureconfig" % "0.12.3",
 
   // URL Parsing
   "io.lemonlabs" %% "scala-uri" % "2.2.2",
+
+  // CLI
+  "com.monovore" %% "decline" % "1.2.0",
 
   // Parsing
   "org.jsoup" % "jsoup" % "1.13.1",
@@ -48,4 +56,5 @@ scalacOptions ++= Seq(
 
 enablePlugins(JavaAppPackaging)
 
-mainClass in assembly := Some("com.pinkstack.realestate.ScraperApp")
+mainClass in assembly := Some("com.pinkstack.realestate.apps.Scraper")
+assemblyJarName in assembly := "scraper.jar"

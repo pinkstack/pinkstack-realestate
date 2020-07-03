@@ -5,14 +5,9 @@ import pureconfig.generic.auto._
 import pureconfig.ConfigSource
 import pureconfig.generic.ProductHint
 
-case class Seed(initialCategories: List[String]) {
-}
+case class Seed(initialCategories: List[String])
 
-case class Pagination(categoryPagesLimit: Int) {
-  // TODO: There is a problem with environment variables substitution
-  // Issue:
-  def this(categoryPagesLimit: String) = this(categoryPagesLimit.toInt)
-}
+case class Pagination(categoryPagesLimit: Int)
 
 case class Fetching(categoriesParallelism: Int, estatesParallelism: Int)
 

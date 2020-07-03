@@ -8,4 +8,9 @@ val documents: Seq[String] =
 
 
 
-Jsoup.connect(documents.head).get()
+// Jsoup.connect(documents.head).get()
+
+"this".split(",") match {
+  case Array(xs) => "x"
+  case _ => "y"
+}

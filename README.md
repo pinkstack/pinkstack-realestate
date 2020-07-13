@@ -11,7 +11,7 @@ The easiest way to run the scraper with stand-alone mode is to use the neat CLI 
 sbt assembly
 
 # Run it with 
-java -jar target/*/scraper.jar --categories prodaja --pages 10
+java -jar scraper/*/*/scraper.jar --categories prodaja --pages 10
 ```
 
 By default, the scraper spits out [JSON]. 

@@ -6,15 +6,17 @@ scalaVersion := "2.13.2"
 
 libraryDependencies ++= Seq(
   // Akka and Akka Streams
+  "com.typesafe.akka" %% "akka-http" % "10.1.12",
   "com.typesafe.akka" %% "akka-actor-typed" % "2.6.6",
   "com.typesafe.akka" %% "akka-stream" % "2.6.6",
-  "com.typesafe.akka" %% "akka-http" % "10.1.12",
 
   // Clustering and remoting
   "com.typesafe.akka" %% "akka-cluster" % "2.6.6",
   "com.typesafe.akka" %% "akka-cluster-typed" % "2.6.6",
-  "com.lightbend.akka.management" %% "akka-management-cluster-bootstrap" % "1.0.8",
+  // "com.lightbend.akka.management" %% "akka-management" % "1.0.8",
+  // "com.lightbend.akka.management" %% "akka-management-cluster-bootstrap" % "1.0.8",
   "com.typesafe.akka" %% "akka-discovery" % "2.6.6",
+  "com.typesafe.akka" %% "akka-cluster-tools" % "2.6.6",
 
   // FP
   "org.typelevel" %% "cats-core" % "2.0.0",
@@ -41,6 +43,9 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % "0.12.3",
   "io.circe" %% "circe-generic" % "0.12.3",
   "io.circe" %% "circe-parser" % "0.12.3",
+
+  // JSON + Akka
+  "de.heikoseeberger" %% "akka-http-circe" % "1.31.0",
 
   // Logging
   "ch.qos.logback" % "logback-classic" % "1.2.3",

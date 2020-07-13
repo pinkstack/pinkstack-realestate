@@ -43,6 +43,11 @@ INITIAL_CATEGORIES=prodaja,najem
 CATEGORY_PAGES_LIMIT=3
 ```
 
+## Resources
+
+- https://blog.softwaremill.com/running-akka-cluster-on-kubernetes-e4cd2913e951
+
+
 ## Authors
 
 - [Oto Brglez](https://github.com/otobrglez)

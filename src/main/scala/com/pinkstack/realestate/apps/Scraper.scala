@@ -30,9 +30,17 @@ object Implicits {
   }
 }
 
+import Implicits._
+
 object Main {
 
   import Implicits._
+
+  val estatePrinter: Option[Estate] => Unit = {
+    case Some(estate: Estate) =>
+      println(estate.asJson.noSpaces)
+    case None =>
+  }
 
   def withConfiguration(categories: CategoryList, numberOfPages: Int): Unit = {
     val configurationLens: Configuration => Configuration =
@@ -45,13 +53,10 @@ object Main {
 
     NepClient()
       .pipeline
-      .collect { case Some(estate: Estate) => estate.asJson.noSpaces }
-      .runWith(Sink.foreach(println))
+      .runWith(Sink.foreach(estatePrinter))
       .onComplete(_ => system.terminate())
   }
 }
-
-import com.pinkstack.realestate.apps.Implicits._
 
 object Scraper extends CommandApp(name = "scraper",
   header = "Scraper is used for fetching real estate listings directly in CLI.",

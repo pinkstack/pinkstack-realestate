@@ -16,8 +16,6 @@ object Domain {
       s"EstateRequest ${request.uri}"
   }
 
-  implicit val lemonLabsUrlToAkkaUrl: Url => Uri = url => Uri(url.toString())
-
   case class Location(latitude: Double, longitude: Double)
 
   case class Estate(title: String,
@@ -28,4 +26,8 @@ object Domain {
                     locationDetails: Map[String, Vector[String]] = Map.empty,
                     categories: Map[String, String] = Map.empty[String, String],
                     location: Option[Location] = None)
+}
+
+object Implicits {
+  implicit val lemonLabsUrlToAkkaUrl: Url => Uri = url => Uri(url.toString())
 }

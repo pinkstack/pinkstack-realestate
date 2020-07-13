@@ -65,17 +65,15 @@ object NepEstateParser {
     categoriesOpt.fold[ValidationResult[Map[String, String]]](NoCategories.invalidNec)(_.validNec)
   }
 
-  val validatedPrice: Transformer[Double] = { document =>
+  val validatedPrice: Transformer[Double] = document =>
     Option(document.selectFirst("meta[itemprop='price']"))
       .flatMap(_.attr("content").toDoubleOption)
       .fold[ValidationResult[Double]](NoPrice.invalidNec)(_.validNec)
-  }
 
-  val validatedRefNumber: Transformer[String] = { document =>
+  val validatedRefNumber: Transformer[String] = document =>
     Option(document.selectFirst("span.ikona-sh"))
       .map(_.attr("data-id"))
       .fold[ValidationResult[String]](NoRefNumber.invalidNec)(_.validNec)
-  }
 
   val validatedLocationDetails: Transformer[Map[String, Vector[String]]] = { document =>
     import scala.jdk.CollectionConverters._

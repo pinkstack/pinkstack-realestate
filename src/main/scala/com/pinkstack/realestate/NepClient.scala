@@ -1,12 +1,14 @@
 package com.pinkstack.realestate
 
+import cats._
+import cats.implicits._
+import cats.data.NonEmptyList
 import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpRequest
 import akka.stream.ThrottleMode
 import akka.stream.scaladsl.{Flow, Merge, Source}
-import cats.data.NonEmptyChain
 import cats.data.Validated.{Invalid, Valid}
 import com.typesafe.scalalogging.LazyLogging
 import io.lemonlabs.uri.typesafe.dsl._
@@ -23,6 +25,7 @@ final case class NepClient(timeout: FiniteDuration = 4.seconds)(
   val configuration: Configuration) extends LazyLogging {
 
   import Domain._
+  import Implicits._
 
   final val ROOT_URL = Url.parse("https://www.nepremicnine.net")
 
@@ -72,6 +75,9 @@ final case class NepClient(timeout: FiniteDuration = 4.seconds)(
     requestDocument(categoryRequest.request)
       .map(doc => (categoryRequests(doc), estateRequests(doc)))
   }
+
+  val fetchEstatePageViaUrl: Url => Future[Option[Estate]] = url =>
+    fetchEstatePage(EstateRequest(HttpRequest(uri = url), ""))
 
   val fetchEstatePage: EstateRequest => Future[Option[Estate]] = { estateRequest =>
     val parse: Document => Option[Estate] = { document =>

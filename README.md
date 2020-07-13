@@ -17,14 +17,14 @@ java -jar target/*/scraper.jar --categories prodaja --pages 10
 By default, the scraper spits out [JSON]. 
 
 ```bash
-java -jar target/*/scraper.jar --categories prodaja --pages 2 | jq -R 'fromjson?'
+java -jar scraper/*/*/scraper.jar --categories prodaja --pages 2 | jq -R 'fromjson?'
 ```
 
 So to make things bit easier for your eyes your 
 can use [jq] to format or restructure output further for example to CSV.
 
 ```bash
-java -jar target/*/scraper.jar --categories prodaja --pages 10 \
+java -jar scraper/*/*/scraper.jar --categories prodaja --pages 10 \
     | jq -R 'fromjson?' \
     | jq -r "([.refNumber, .title, .price, .location.latitude, .location.longitude]) | @csv" \
     > prodaja.csv
@@ -33,7 +33,7 @@ java -jar target/*/scraper.jar --categories prodaja --pages 10 \
 Adjusting parallelism and other [fine `application.conf` switches][configuration] can be easily done via loading of different configuration.
 
 ```bash
-java -Dconfig.resource=quick.conf -jar target/*/scraper.jar --categories najem
+java -Dconfig.resource=quick.conf -jar scraper/*/*/scraper.jar --categories najem
 ```
 
 Some [configuration options][configuration] can also be adjusted via environment variables i.e.
@@ -52,6 +52,6 @@ CATEGORY_PAGES_LIMIT=3
 
 - [Oto Brglez](https://github.com/otobrglez)
 
-[configuration]: src/main/resources/application.conf
+[configuration]: scraper/src/main/resources/application.conf
 [jq]: https://stedolan.github.io/jq/
 [JSON]: https://www.json.org/json-en.html
